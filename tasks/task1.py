@@ -5,10 +5,11 @@ def detect_by_color(
         image_path: str,
         lower_hsv: tuple[int,int,int],
         upper_hsv: tuple[int,int,int],
-        min_area: int = 500,
+        min_area: int = 2000,
         output_path: str = 'result.jpg'
 ) -> list[dict]:
         image = cv2.imread(image_path)
+        print(image is None)
         if image is None:
                 raise ValueError("Изображение не загружено")
         hsv = cv2.cvtColor(image,cv2.COLOR_BGR2HSV)
@@ -19,6 +20,7 @@ def detect_by_color(
         mask1 = cv2.morphologyEx(color_mask,cv2.MORPH_OPEN,kernel)
         mask2 = cv2.morphologyEx(mask1,cv2.MORPH_DILATE,kernel)
         contours,_ = cv2.findContours(mask2,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
+        print(len(contours))
         output = image.copy()
         result = []
         for cnt in contours:
@@ -44,12 +46,15 @@ def detect_by_color(
                         "area":area
                 })
         cv2.imwrite(output_path,output)
+        cv2.imshow("mask", mask2)
+        cv2.waitKey(0)
         return result
-if __name__ == "__task1__":
+
+if __name__ == "__main__":
         result = detect_by_color(
                 "input.jpeg",
-                (0,120,70),
-                (10,255,255)
+                (0,0,0),
+                (180,255,255)
         )
         print("Найденные обьекты:")
         for obj in result:
