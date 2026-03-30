@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
 import cv2
-from tasks.task2 import ImagePreprocessor
+from task2 import ImagePreprocessor
 
 
 class TestImagePreprocessor(unittest.TestCase):
